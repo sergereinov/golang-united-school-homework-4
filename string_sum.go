@@ -28,7 +28,7 @@ var (
 
 func StringSum(input string) (output string, err error) {
 	if len(input) == 0 {
-		return "", fmt.Errorf("StringSum %w", errorEmptyInput)
+		return "", fmt.Errorf("StringSum@len(input) %w", errorEmptyInput)
 	}
 
 	nums := make([]int, 0)
@@ -40,14 +40,14 @@ func StringSum(input string) (output string, err error) {
 
 		n, cErr := strconv.Atoi(one)
 		if cErr != nil {
-			return "", fmt.Errorf("StringSum %w", cErr)
+			return "", fmt.Errorf("StringSum@Atoi %w", cErr)
 		}
 
 		nums = append(nums, n)
 	}
 
 	if len(nums) != 2 {
-		return "", fmt.Errorf("StringSum %w", errorNotTwoOperands)
+		return "", fmt.Errorf("StringSum@len(nums) %w", errorNotTwoOperands)
 	}
 
 	return fmt.Sprint(nums[0] + nums[1]), nil
