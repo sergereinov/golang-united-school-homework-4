@@ -2,6 +2,10 @@ package string_sum
 
 import (
 	"errors"
+	"fmt"
+	"strconv"
+	"strings"
+	"unicode"
 )
 
 //use these errors as appropriate, wrapping them with fmt.Errorf function
@@ -23,5 +27,47 @@ var (
 // Use the errors defined above as described, again wrapping into fmt.Errorf
 
 func StringSum(input string) (output string, err error) {
-	return "", nil
+	if len(input) == 0 {
+		return "", fmt.Errorf("StringSum %w", errorEmptyInput)
+	}
+
+	nums := make([]int, 0)
+	for one, next := "", input; len(next) > 0; {
+		one, next = cutOperand(next)
+
+		one = strings.ReplaceAll(one, " ", "")
+		one = strings.ReplaceAll(one, "+", "")
+
+		n, cErr := strconv.Atoi(one)
+		if cErr != nil {
+			return "", fmt.Errorf("StringSum %w", cErr)
+		}
+
+		nums = append(nums, n)
+	}
+
+	if len(nums) != 2 {
+		return "", fmt.Errorf("StringSum %w", errorNotTwoOperands)
+	}
+
+	return fmt.Sprint(nums[0] + nums[1]), nil
+}
+
+func cutOperand(input string) (one string, next string) {
+	const opers = "+-"
+	var found bool
+	for i, v := range input {
+		if strings.ContainsRune(opers, v) {
+			if !found {
+				continue
+			}
+			return input[:i], input[i:]
+		}
+
+		if !unicode.IsSpace(v) {
+			found = true
+		}
+	}
+
+	return input, ""
 }
